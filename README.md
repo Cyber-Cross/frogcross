@@ -1,9 +1,6 @@
-# frogcross
-Frogger with levels and score
+# Website with CI/CD Pipeline
 
-# 🎮 Tic Tac Toe - Website with CI/CD Pipeline
-
-A fully-automated Tic Tac Toe game deployed to AWS ECS Fargate via GitHub Actions.
+Frogger with levels and score.
 
 # 🏗️ Architecture
 
