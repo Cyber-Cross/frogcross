@@ -14,6 +14,10 @@ let highScore = Number(localStorage.getItem('froggerHighScore') || 0);
 
 let sounds = {};
 
+// new: hit message state
+let hitMessage = '';
+let hitMessageTimeoutId = null;
+
 // ===== LEVEL CONFIGS =====
 const levels = {
   1: { name: 'Easy',   baseSpeed: 1.5, numLanes: 4, carsPerLane: 1 },
@@ -36,6 +40,20 @@ function loadSounds() {
 
 function playSound(name) {
   if (sounds[name] && typeof sounds[name].play === 'function') sounds[name].play();
+}
+
+// ===== HIT MESSAGE HELPERS =====
+function showHitMessage(text, duration = 1000) {
+  hitMessage = text;
+
+  if (hitMessageTimeoutId) {
+    clearTimeout(hitMessageTimeoutId);
+  }
+
+  hitMessageTimeoutId = setTimeout(() => {
+    hitMessage = '';
+    hitMessageTimeoutId = null;
+  }, duration);
 }
 
 // ===== SAFE ZONE =====
@@ -152,6 +170,7 @@ function update() {
       if (hit) {
         lives--;
         playSound('hit');
+        showHitMessage(`Ouch! Lives left: ${lives}`);
 
         if (lives <= 0) {
           playSound('lose');
@@ -234,6 +253,15 @@ function draw() {
   // frog
   ctx.fillStyle = frog.color;
   ctx.fillRect(frog.x, frog.y, frog.width, frog.height);
+
+  // hit message (top center)
+  if (hitMessage) {
+    ctx.font = '24px Arial';
+    ctx.fillStyle = '#ff4444';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'top';
+    ctx.fillText(hitMessage, canvas.width / 2, grid);
+  }
 }
 
 // ===== LOOP =====
